@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 import feedparser
-http://www.youtube.com/watch?v=BnIJ7Ba5Sr4&feature=youtube_gdata
 import sys
-import codecs
-import re
-import os
-import optparse
 from subprocess import Popen, PIPE, STDOUT
 # Returns 0 if ran without output, else returns the actual output
 def run(cmd, bshell = False, verbose = False):
@@ -25,4 +20,11 @@ def run(cmd, bshell = False, verbose = False):
 def download(url):
     feed = feedparser.parse(url)
     for item in feed['items']:
+        print 'Downloading', item['title'], '...'
         run(['yt-dl', '-t', item['link']], False, True)
+
+def main():
+    download(sys.argv[1])
+
+if __name__ == '__main__':
+    main()
