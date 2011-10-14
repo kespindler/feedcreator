@@ -1,4 +1,14 @@
 #!/usr/bin/env python
+#The way to use this script is as follows:
+#Execute ./stanfordimport.py {0}, where {0} is the course unit of the videos
+#you'd like to download. This script then starts at the most recent videos in
+#the stanford lecture's youtube feed, and goes back in time to find videos
+#of that course unit. It downloads metadata about 25 videos at a time, and will
+#stop requesting metadata once it receives a set of 25 where it finds NO videos
+#from a given unit, on the assumption that we've got too far back in time at that
+#point. Note that there is a guard to prevent this stop until you've found _any_
+#videos, so if you try to download Unit 2 while the course is on Unit 7, that should
+#work fine.
 import feedparser
 import sys
 from subprocess import Popen, PIPE, STDOUT
@@ -40,15 +50,22 @@ def findinfeed(feed, query):
 def main():
     # sys.argv[1] is the unit number
     numfound = 1
+    foundany = False
     startindex = 1
     unit = sys.argv[1]
-    while numfound:
+    while numfound and not foundany:
         url = a.format(startindex)
         conn = urlopen(url)
         feedstring = conn.read()
         conn.close()
         numfound = findinfeed(feedstring, 'Unit {0}'.format(unit))
+        if numfound:
+            foundany = True
         startindex += 25
+    if numfound:
+        print 'Downloaded', foundany, 'videos.'
+    else:
+        print 'Could not find any videos for the unit. Something went wrong.'
 
 if __name__ == '__main__':
     main()
