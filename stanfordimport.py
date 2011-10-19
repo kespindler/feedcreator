@@ -49,21 +49,21 @@ def findinfeed(feed, query):
 
 def main():
     # sys.argv[1] is the unit number
-    numfound = 1
+    numfound = 0
     foundany = False
     startindex = 1
     unit = sys.argv[1]
-    while numfound and not foundany:
+    while numfound or not foundany:
         url = a.format(startindex)
         conn = urlopen(url)
         feedstring = conn.read()
         conn.close()
-        numfound = findinfeed(feedstring, 'Unit {0}'.format(unit))
+        numfound += findinfeed(feedstring, 'Unit {0}'.format(unit))
         if numfound:
             foundany = True
         startindex += 25
     if numfound:
-        print 'Downloaded', foundany, 'videos.'
+        print 'Downloaded', numfound, 'videos.'
     else:
         print 'Could not find any videos for the unit. Something went wrong.'
 
