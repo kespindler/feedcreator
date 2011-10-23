@@ -39,6 +39,9 @@ def dlvideo(url, title = None):
 #finds items in the feed that matches query, and downloads those. Returns # of items found.
 def findinfeed(feed, query):
     items = eval(feed)
+    if not 'entry' in items['feed']:
+        print 'No entries in this feed'
+        return 0
     entries = items['feed']['entry']
     result = 0
     for e in entries:
