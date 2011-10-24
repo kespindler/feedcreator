@@ -62,7 +62,7 @@ def main():
         feedstring = conn.read()
         conn.close()
         numfound += findinfeed(feedstring, 'Unit {0}'.format(unit))
-        if numfound:
+        if numfound and not foundany:
             foundany = True
         startindex += 25
     if numfound:
