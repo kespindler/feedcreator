@@ -53,6 +53,7 @@ def findinfeed(feed, query):
 def main():
     # sys.argv[1] is the unit number
     numfound = 0
+    totalfound = 0
     foundany = False
     startindex = 1
     unit = sys.argv[1]
@@ -61,12 +62,13 @@ def main():
         conn = urlopen(url)
         feedstring = conn.read()
         conn.close()
-        numfound += findinfeed(feedstring, 'Unit {0}'.format(unit))
+        numfound = findinfeed(feedstring, 'Unit {0}'.format(unit))
+        totalfound += numfound
         if numfound and not foundany:
             foundany = True
         startindex += 25
     if numfound:
-        print 'Downloaded', numfound, 'videos.'
+        print 'Downloaded', totalfound, 'videos.'
     else:
         print 'Could not find any videos for the unit. Something went wrong.'
 
